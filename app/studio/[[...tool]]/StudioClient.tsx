@@ -1,11 +1,19 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { Config } from "sanity";
 
-// ssr: false is only valid inside a Client Component
+// ALL sanity imports must live inside this client component —
+// importing sanity.config in a server component causes createContext errors
+// because Sanity/styled-components evaluate browser globals during SSR.
 const NextStudio = dynamic(
-  () => import("next-sanity/studio").then((mod) => ({ default: mod.NextStudio })),
+  async () => {
+    const [{ NextStudio: Studio }, { default: config }] = await Promise.all([
+      import("next-sanity/studio"),
+      import("@/sanity.config"),
+    ]);
+    // Return a component that has config baked in
+    return { default: () => <Studio config={config} /> };
+  },
   {
     ssr: false,
     loading: () => (
@@ -24,6 +32,6 @@ const NextStudio = dynamic(
   }
 );
 
-export function StudioClient({ config }: { config: Config }) {
-  return <NextStudio config={config} />;
+export function StudioClient() {
+  return <NextStudio />;
 }
