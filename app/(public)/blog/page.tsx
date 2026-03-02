@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -153,10 +154,12 @@ export default function BlogPage({
         </div>
       </div>
 
-      {/* Category filter (client component) */}
+      {/* Category filter (client component — useSearchParams requires Suspense) */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <BlogCategoryFilter categories={CATEGORIES} />
+          <Suspense fallback={<div className="h-14" />}>
+            <BlogCategoryFilter categories={CATEGORIES} />
+          </Suspense>
         </div>
       </div>
 
