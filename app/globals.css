@@ -1,26 +1,158 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Tailwind v4 Theme Tokens ─── */
+@theme {
+  /* Brand Colors */
+  --color-brand-orange:   #FF8C42;
+  --color-brand-coral:    #FF6F61;
+  --color-brand-soft:     #FFAA5C;
+  --color-brand-golden:   #FFD47F;
+  --color-brand-charcoal: #444444;
+  --color-brand-dark:     #333333;
+  --color-brand-grey:     #666666;
+  --color-brand-light:    #F7F8FA;
+
+  /* Font Families (--nf-* vars injected at runtime by next/font/google) */
+  --font-playfair: var(--nf-playfair), "Playfair Display", Georgia, serif;
+  --font-lora:     var(--nf-lora), Lora, Georgia, serif;
+  --font-sans:     var(--nf-inter), Inter, system-ui, sans-serif;
+
+  /* Box Shadows */
+  --shadow-card:       0 2px 12px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-brand:      0 4px 20px rgba(255,140,66,0.35);
+
+  /* Border Radius */
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+
+  /* Animations */
+  --animate-fade-in:    fadeIn 0.4s ease-in-out;
+  --animate-slide-up:   slideUp 0.4s ease-out;
+  --animate-pulse-soft: pulseSoft 2s ease-in-out infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Keyframes ─── */
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes slideUp {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base ─── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: var(--font-lora);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ─── Global Utility Classes ─── */
+.text-gradient {
+  background: linear-gradient(135deg, #FF8C42, #FF6F61);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-brand {
+  background: linear-gradient(135deg, #FF8C42, #FF6F61);
+  color: white;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-sans);
+}
+.btn-brand:hover {
+  box-shadow: 0 6px 24px rgba(255, 140, 66, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-outline-brand {
+  border: 1.5px solid #FF8C42;
+  color: #FF8C42;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  background: transparent;
+  font-family: var(--font-sans);
+}
+.btn-outline-brand:hover {
+  background: #FF8C42;
+  color: white;
+}
+
+.section-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #FF8C42;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: #f1f1f1; }
+::-webkit-scrollbar-thumb  { background: #e0d5cc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #FF8C42; }
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 2px solid #FF8C42;
+  outline-offset: 2px;
+}
+
+/* ─── Prose for CMS / Rich Text ─── */
+.prose-brand h2 { font-family: var(--font-playfair); color: #333; margin-bottom: 0.75rem; }
+.prose-brand h3 { font-family: var(--font-playfair); color: #333; margin-bottom: 0.5rem; }
+.prose-brand p  { font-family: var(--font-lora); line-height: 1.85; color: #555; margin-bottom: 1.25rem; }
+.prose-brand ul { list-style: disc; padding-left: 1.5rem; color: #555; }
+.prose-brand li { margin-bottom: 0.4rem; font-family: var(--font-lora); }
+.prose-brand a  { color: #FF8C42; }
+.prose-brand a:hover { text-decoration: underline; }
+.prose-brand strong { color: #333; }
+.prose-brand blockquote {
+  border-left: 3px solid #FF8C42;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #666;
+  margin: 1.5rem 0;
 }
