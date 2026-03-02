@@ -8,8 +8,13 @@ import path from "node:path";
 import { defineConfig } from "prisma/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-// Load .env so DATABASE_URL / DIRECT_URL are available when this file is evaluated
-import "dotenv/config";
+// Load .env for local dev — on Vercel, env vars are injected directly
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require("dotenv").config();
+} catch {
+  // dotenv not critical in CI — env vars injected by platform
+}
 
 export default defineConfig({
   schema: path.join(__dirname, "prisma/schema.prisma"),
@@ -18,15 +23,13 @@ export default defineConfig({
     url: process.env.DATABASE_URL!,
   },
 
-  // @ts-ignore — adapter typing is loose in v7 beta
+  // @ts-ignore — adapter typing is loose in v7
   migrate: {
     async adapter(env: NodeJS.ProcessEnv) {
       const { Pool } = await import("pg");
-      // Use DIRECT_URL for migrations (bypasses connection pooling)
-      // Falls back to pooler DATABASE_URL if DIRECT_URL not set
       const pool = new Pool({
         connectionString: env.DIRECT_URL ?? env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false }, // Required for Supabase
+        ssl: { rejectUnauthorized: false },
       });
       return new PrismaPg(pool);
     },
