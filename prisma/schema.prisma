@@ -7,9 +7,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Prisma v7: connection URL is in prisma.config.ts, not here
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─── NextAuth Models ──────────────────────────────────────
